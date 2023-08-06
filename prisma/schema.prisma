@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  firstName    String
+  lastName     String
+  userName     String   @unique @db.VarChar(20)
+  emailAddress String   @unique
+  password     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model User {
+  id          String        @id @default(uuid())
+  firstName   String
+  lastName    String
+  address     String        @db.Text
+  phone       String
+  email       String
+  role        String
+  department  String
+  matricNo    String?
+  staffId     String?
+  password    String
+  bookRequest BookRequest[]
+  inbox       Inbox[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Book {
+  id            String        @id @default(uuid())
+  title         String        @db.Text
+  description   String        @db.Text
+  category      String        @db.Text
+  author        String        @db.Text
+  published_by  String        @db.Text
+  published_on  DateTime      @db.Date
+  display_image String        @db.Text
+  isbn          String        @db.Text
+  status        Boolean       @default(false)
+  bookRequest   BookRequest[]
+  inbox         Inbox[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model BookRequest {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  requestDate DateTime @db.Date
+  dueDate     DateTime @db.Date
+  pickUp      String   @db.Text
+  status      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inbox {
+  id        String   @id @default(uuid())
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  subject   String   @db.Text
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -64,7 +64,7 @@ const login = async (req, res) => {
                     {
                         id: query.id
                     },
-                    process.env.USER_ACCESS_TOKEN,
+                    process.env.AUTH_USER_TOKEN,
                     {expiresIn: '2h'}
                 )
                 res.setHeader('user-authToken', accessToken)

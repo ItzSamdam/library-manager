@@ -22,7 +22,7 @@ const login = async (req, res) => {
                     {
                         id: query.id
                     },
-                    process.env.ADMIN_ACCESS_TOKEN,
+                    process.env.AUTH_ADMIN_TOKEN,
                     {expiresIn: '2h'}
                 )
                 res.setHeader('admin-authToken', accessToken)
